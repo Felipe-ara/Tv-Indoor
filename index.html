@@ -15,11 +15,13 @@
       width: 100%;
       height: 100vh;
       overflow: hidden;
+      background-color: black; /* fundo para as barras laterais ou superior/inferior */
     }
     img, video {
       width: 100%;
       height: 100vh;
-      object-fit: cover;
+      object-fit: contain;
+      background-color: black; /* garante fundo preto ao redor da imagem */
       display: block;
     }
   </style>
@@ -42,40 +44,4 @@
 
     function showNext() {
       const container = document.getElementById('content');
-      container.innerHTML = '';
-
-      if (items.length === 0) return;
-
-      const item = items[currentIndex];
-
-      if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.url;
-        container.appendChild(img);
-      } else if (item.type === 'video') {
-        const video = document.createElement('video');
-        video.src = item.url;
-        video.autoplay = true;
-        video.controls = false;
-        video.loop = false;
-        video.onended = () => {
-          currentIndex = (currentIndex + 1) % items.length;
-          showNext();
-        };
-        container.appendChild(video);
-        return; // espera vídeo acabar
-      } else if (item.type === 'text') {
-        container.innerHTML = `<h1>${item.text}</h1>`;
-      }
-
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % items.length;
-        showNext();
-      }, item.duration || 8000);
-    }
-
-    loadContent();
-    setInterval(loadContent, 60000); // atualiza a cada 1 min
-  </script>
-</body>
-</html>
+      container.inner
