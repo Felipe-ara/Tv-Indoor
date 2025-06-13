@@ -1,20 +1,17 @@
 [
   {
     "type": "image",
-    "url": "https://ibb.co/fYM6s3Z6",
-    "duration": 10000
+    "url": "https://i.ibb.co/QF9S4WhS/LOGO-02-2x.png",
+    "duration": 5000
   },
-  {
-    "type": "video",
-    "url": "https://www.youtube.com/watch?v=C0lKu-0jik0"
-  },
+  
   {
     "type": "image",
-    "url": "https://ibb.co/4Zg95ZfJ"
+    "url": "https://i.ibb.co/rGfT1Gtv/qrcode-grupopluralmed-sharepoint-com.png"
   },
   {
     "type": "text",
     "text": "Reunião geral às 10h",
-    "duration": 8000
+    "duration": 5000
   }
 ]
