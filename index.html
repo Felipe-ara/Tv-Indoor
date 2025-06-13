@@ -1,22 +1,97 @@
-function loadContent() {
-  fetch('config.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro ao carregar config.json: ' + response.status);
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('config.json está vazio ou não é um array válido');
-      }
-      items = data;
-      currentIndex = 0; // resetar índice
-      showNext();
-    })
-    .catch(error => {
-      console.error(error);
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>TV Indoor</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    #content {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background-color: black;
+    }
+    img, video {
+      width: 100%;
+      height: 100vh;
+      object-fit: contain;
+      background-color: black;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="content">Carregando conteúdo...</div>
+
+  <script>
+    let currentIndex = 0;
+    let items = [];
+
+    function loadContent() {
+      fetch('config.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro ao carregar config.json: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('config.json está vazio ou não é um array válido');
+          }
+          items = data;
+          currentIndex = 0; // resetar índice
+          showNext();
+        })
+        .catch(error => {
+          console.error(error);
+          const container = document.getElementById('content');
+          container.innerHTML = `<p style="color:red;">Erro ao carregar conteúdo:<br>${error.message}</p>`;
+        });
+    }
+
+    function showNext() {
       const container = document.getElementById('content');
-      container.innerHTML = `<p style="color:red;">Erro ao carregar conteúdo:<br>${error.message}</p>`;
-    });
-}
+      container.innerHTML = '';
+
+      if (items.length === 0) return;
+
+      const item = items[currentIndex];
+
+      if (item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.url;
+        container.appendChild(img);
+      } else if (item.type === 'video') {
+        const video = document.createElement('video');
+        video.src = item.url;
+        video.autoplay = true;
+        video.controls = false;
+        video.loop = false;
+        video.onended = () => {
+          currentIndex = (currentIndex + 1) % items.length;
+          showNext();
+        };
+        container.appendChild(video);
+        return; // espera vídeo acabar
+      } else if (item.type === 'text') {
+        container.innerHTML = `<h1>${item.text}</h1>`;
+      }
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % items.length;
+        showNext();
+      }, item.duration || 8000);
+    }
+
+    loadContent();
+    setInterval(loadContent, 60000); // atualiza a cada 1 min
+  </script>
+</body>
+</html>
