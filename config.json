@@ -2,7 +2,7 @@
   {
     "type": "image",
     "url": "https://i.ibb.co/QF9S4WhS/LOGO-02-2x.png",
-    "duration": 5000
+    "duration": 10000
   },
   
   {
@@ -12,6 +12,6 @@
   {
     "type": "text",
     "text": "Reunião geral às 10h",
-    "duration": 5000
+    "duration": 10000
   }
 ]
