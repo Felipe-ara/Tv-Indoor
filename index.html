@@ -1,47 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>TV Indoor</title>
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
-      text-align: center;
-    }
-    #content {
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      background-color: black; /* fundo para as barras laterais ou superior/inferior */
-    }
-    img, video {
-      width: 100%;
-      height: 100vh;
-      object-fit: contain;
-      background-color: black; /* garante fundo preto ao redor da imagem */
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <div id="content">Carregando conteúdo...</div>
-
-  <script>
-    let currentIndex = 0;
-    let items = [];
-
-    function loadContent() {
-      fetch('config.json')
-        .then(response => response.json())
-        .then(data => {
-          items = data;
-          showNext();
-        });
-    }
-
-    function showNext() {
+function loadContent() {
+  fetch('config.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro ao carregar config.json: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('config.json está vazio ou não é um array válido');
+      }
+      items = data;
+      currentIndex = 0; // resetar índice
+      showNext();
+    })
+    .catch(error => {
+      console.error(error);
       const container = document.getElementById('content');
-      container.inner
+      container.innerHTML = `<p style="color:red;">Erro ao carregar conteúdo:<br>${error.message}</p>`;
+    });
+}
